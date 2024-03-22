@@ -3,13 +3,14 @@ import Swal from "sweetalert2";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  useSignupMutation,
-} from "../../../api/auth";
+import { useSignupMutation } from "../../../api/auth";
 import { useNavigate } from "react-router-dom";
 import { EGender, IRegisterPayload } from "../../../interfaces/Login";
 import { ICountry, IState } from "../../../interfaces/Location";
-import { useGetCitiesByCountryQuery, useGetCountriesQuery } from "../../../api/location";
+import {
+  useGetCitiesByCountryQuery,
+  useGetCountriesQuery,
+} from "../../../api/location";
 
 const RegisterSchema = yup.object().shape({
   email: yup
@@ -24,10 +25,10 @@ const RegisterSchema = yup.object().shape({
     .string()
     .required("Vui lòng xác nhận lại mật khẩu")
     .oneOf([yup.ref("password")], "Xác nhận mật khẩu không khớp với mật khẩu"),
-  name: yup.string(),
-  country: yup.string(),
-  sex: yup.string(),
-  city: yup.string(),
+  name: yup.string().required("Vui lòng điền tên"),
+  country: yup.string().required("Vui lòng chọn quốc tịch"),
+  sex: yup.string().required("Vui lòng chọn giới tính"),
+  city: yup.string().required("Vui lòng chọn tỉnh thành"),
 });
 
 const Register = () => {
@@ -35,20 +36,10 @@ const Register = () => {
   const [countries, setCountries] = useState<ICountry[]>([]);
   const [cities, setCities] = useState<IState[]>([]);
 
-  const {
-    data: countriesData,
-    error: countriesError,
-    isLoading: countriesLoading,
-  } = useGetCountriesQuery({});
-  const {
-    data: citiesData,
-    error: citiesError,
-    isLoading: citiesLoading,
-  } = useGetCitiesByCountryQuery(selectedCountry || 0);
+  const { data: countriesData } = useGetCountriesQuery({});
+  const { data: citiesData } = useGetCitiesByCountryQuery(selectedCountry || 0);
 
   useEffect(() => {
-    console.log(countriesData, citiesData);
-    
     if (countriesData) {
       setCountries(countriesData.data);
     }
@@ -89,7 +80,7 @@ const Register = () => {
     if (!response?.error) {
       Swal.fire("Good job!", "Đăng kí thành công", "success");
       setTimeout(() => {
-        navigate("/signin");
+        navigate("/login");
       }, 1000);
     } else {
       Swal.fire({
@@ -103,12 +94,13 @@ const Register = () => {
     <div className="body">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="login-box">
+          <h3>Đăng kí</h3>
           <div className="input-box">
             <input
               {...register("name")}
               type="text"
               className="input-field"
-              placeholder="Họ"
+              placeholder="Họ tên"
               id="First name"
             />
             <p className="error">{errors.name ? errors?.name.message : ""}</p>
@@ -148,6 +140,15 @@ const Register = () => {
               {errors.repeatPassword ? errors?.repeatPassword.message : ""}
             </p>
           </div>
+
+          <div className="input-box">
+            <select {...register("sex")} className="input-field">
+              <option value="">Chọn giới tính</option>
+              <option>{EGender.Male}</option>
+              <option>{EGender.Female}</option>
+            </select>
+            <p className="error">{errors.sex ? errors?.sex.message : ""}</p>
+          </div>
           <div className="input-box">
             <select
               {...register("country")}
@@ -165,16 +166,6 @@ const Register = () => {
               {errors.country ? errors?.country.message : ""}
             </p>
           </div>
-
-          <div className="input-box">
-            <select {...register("sex")} className="input-field">
-              <option value="">Chọn giới tính</option>
-              <option>{EGender.Male}</option>
-              <option>{EGender.Female}</option>
-            </select>
-            <p className="error">{errors.sex ? errors?.sex.message : ""}</p>
-          </div>
-
           <div className="input-box">
             <select {...register("city")} className="input-field">
               <option value="">Chọn thành phố</option>
