@@ -12,6 +12,7 @@ import {
     persistStore,
 } from "redux-persist";
 import authApi from "../api/auth";
+import locationApi from "../api/location";
 const persistConfig = {
     key: "root",
     storage,
@@ -19,10 +20,12 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-    [authApi.reducerPath]: authApi.reducer
+    [authApi.reducerPath]: authApi.reducer,
+    [locationApi.reducerPath]: locationApi.reducer
 })
 const middleware = [
-    authApi.middleware
+    authApi.middleware,
+    locationApi.middleware
 ]
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 const store = configureStore({

@@ -1,6 +1,6 @@
 .logo_login img {
-    width: 100%;
-    max-width: 200px;
+  width: 100%;
+  max-width: 200px;
 }
 
 /* .inner-form input,
@@ -15,16 +15,18 @@ label {
     justify-content: space-around;
 } */
 .inner-form {
-    text-align: left;
+  text-align: left;
 }
 
 .inner-form input {
-    width: 100%;
-    padding: 5px;
+  width: 100%;
+  padding: 5px;
 }
-#inputCheck{
-    width: auto;
+
+#inputCheck {
+  width: auto;
 }
+
 /* ROBOTO FONT */
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap");
 
@@ -37,6 +39,7 @@ label {
   box-sizing: border-box;
   font-family: "Roboto", sans-serif;
 }
+
 .body {
   display: flex;
   justify-content: center;
@@ -46,10 +49,12 @@ label {
   background-position: center;
   background-size: cover;
 }
+
 .login-header h4 {
   font-size: 34px;
   text-align: center;
 }
+
 .login-box {
   position: relative;
   width: auto;
@@ -59,26 +64,31 @@ label {
   border: 1px solid #ddd;
   border-radius: 10px;
 }
+
 .login-box.login-header {
   display: flex;
   flex-direction: column;
   text-align: center;
   margin: 20px 0 50px 0;
 }
+
 .login-header header {
   font-family: "Poppins", sans-serif;
   color: #333;
   font-size: 30px;
   margin-bottom: 5px;
 }
+
 .login-header p {
   color: #555;
   text-align: center;
 }
+
 .input-box {
   position: relative;
   margin: 20px 0;
 }
+
 .input-box label {
   position: absolute;
   top: 15px;
@@ -86,14 +96,17 @@ label {
   color: #555;
   transition: 0.15s ease-in-out;
 }
+
 .input-box input {
   width: 100%;
   height: 50px;
 }
+
 .input-box button {
   margin: 0 auto;
   padding: 10px 30px;
 }
+
 .input-box .input-field {
   font-size: 1em;
   color: #333;
@@ -102,17 +115,21 @@ label {
   border-radius: 3px;
   outline: none;
 }
+
 .input-box input[type="password"] {
   margin-bottom: 10px;
 }
+
 .input__forgotpassword input {
   margin-bottom: 20px;
 }
+
 .input-box .input-field:focus {
   border: 2px solid #8749f2;
 }
-.input-field:focus ~ label,
-.input-field:valid ~ label {
+
+.input-field:focus~label,
+.input-field:valid~label {
   top: -8px;
   left: 12px;
   font-size: 12px;
@@ -120,28 +137,34 @@ label {
   background: #fff;
   padding: 0 5px;
 }
-.input-field:valid ~ label {
+
+.input-field:valid~label {
   color: #555;
 }
+
 .login-box.forgot {
   display: flex;
   justify-content: space-between;
   margin-bottom: 25px;
 }
+
 .login-box section {
   display: flex;
   align-items: center;
   font-size: 14px;
   color: #555;
 }
+
 #check {
   margin-right: 10px;
 }
+
 section .forgot-link {
   font-weight: 500;
   text-decoration: none;
   color: #7931f5;
 }
+
 .input-submit {
   font-family: "Poppins", sans-serif;
   font-size: 15px;
@@ -151,11 +174,13 @@ section .forgot-link {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .middle-text {
   position: relative;
   width: 100%;
   margin: 30px 0;
 }
+
 .or-text {
   font-family: "Poppins", sans-serif;
   position: absolute;
@@ -165,13 +190,16 @@ section .forgot-link {
   color: #777;
   padding: 10px;
 }
+
 hr {
   border: 1px solid #ddd;
 }
+
 .social-sign-in {
   display: flex;
   gap: 15px;
 }
+
 button {
   display: flex;
   align-items: center;
@@ -179,6 +207,7 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .input-google {
   width: 100%;
   height: 50px;
@@ -186,14 +215,17 @@ button {
   background: #fff;
   border: 1px solid #ccc;
 }
+
 .input-google img {
   width: 25px;
 }
+
 .input-google p {
   font-family: "Poppins", sans-serif;
   font-size: 15px;
   width: 90%;
 }
+
 .input-twitter {
   justify-content: center;
   width: 70px;
@@ -201,41 +233,55 @@ button {
   background: #fff;
   border: 1px solid #ccc;
 }
+
 .input-twitter img {
   width: 30px;
 }
+
 .input-google:hover,
 .input-twitter:hover,
 .input-submit:hover {
   opacity: 0.9;
 }
+
 .sign-up {
   position: absolute;
   bottom: -44px;
   right: 0;
 }
+
 .sign-up p {
   font-size: 14px;
   color: #333;
 }
-.sign-up p > a {
+
+.sign-up p>a {
   text-decoration: none;
 }
+
 @media only screen and (max-width: 510px) {
   .login-box {
     padding: 10px 30px;
     margin: 20px;
   }
 }
+
 @media only screen and (max-width: 415px) {
   .login-box {
     padding: 10px 25px;
     margin: 15px;
   }
 }
+
 .error {
   color: red;
 }
+
 .body form {
-    width: 560px;
+  width: 560px;
+}
+
+.input-box select {
+  width: 100%;
+  height: 50px;
 }

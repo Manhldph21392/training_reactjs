@@ -1,23 +1,25 @@
 import { fetchBaseQuery, createApi } from '@reduxjs/toolkit/query/react';
 const authApi = createApi({
     reducerPath: 'auth',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8080/api' }),
+    baseQuery: fetchBaseQuery({ baseUrl: 'http://api.training.div3.pgtest.co/api/v1' }),
     endpoints: (builder) => ({
         signup: builder.mutation({
-            query: (body) => ({
-                url: '/signup',
+            query: (user) => ({
+                url: '/auth/register',
                 method: 'POST',
-                body
+                body: user
             }),
         }),
         signin: builder.mutation({
             query: (body) => ({
-                url: '/signin',
+                url: '/auth/login',
                 method: 'POST',
                 body
             }),
-        })
+        }),
+    
     })
 })
-export const { useSignupMutation, useSigninMutation } = authApi;
+
+export const { useSignupMutation, useSigninMutation} = authApi;
 export default authApi;
