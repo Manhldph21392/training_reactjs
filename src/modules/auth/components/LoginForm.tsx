@@ -41,7 +41,7 @@ const Signin = () => {
         });
       } else {
         Swal.fire("Good job!", "Đăng nhập thành công", "success");
-        localStorage.setItem("token", JSON.stringify(response.data.data.token));
+        localStorage.setItem("token", response.data.data.token);
 
         dispatch(setUser(response.data));
         setTimeout(() => {

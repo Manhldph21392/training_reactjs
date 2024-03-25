@@ -4,12 +4,10 @@ const productApi = createApi({
     reducerPath: 'product',
     baseQuery: fetchBaseQuery({
         baseUrl: 'http://api.training.div3.pgtest.co/api/v1', prepareHeaders: (headers, { }) => {
-            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImlhdCI6MTY4MjE2MzAxOH0.1OHw4SAkI8-9f6QZWHFG7kWxKAkjz90TiHo960AfoNQ";
-
+            const token = localStorage.getItem('token') || '';
             if (token) {
                 headers.set('Authorization', token);
             }
-
             return headers
         },
     }),
@@ -17,12 +15,7 @@ const productApi = createApi({
         getProducts: builder.query({
             query: () => ({
                 url: `/product`,
-                // This is the same as passing 'text'
-                responseHandler: (response) => {
-                    console.log(response.text());
 
-                    return  response.text()
-                },
             }),
 
         }),

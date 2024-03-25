@@ -9,7 +9,6 @@ const userSlice = createSlice({
     setUser: (state, action) => {
       state.userInfo = action.payload;
     },
-    // Các reducers khác nếu có
   },
 });
 

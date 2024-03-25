@@ -24,7 +24,6 @@ const TableComponent = (props: Props) => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
   const { data: products = [], isLoading, isError } = useGetProductsQuery({});
-  console.log(products);
   
   const handleSearch = (
     selectedKeys: string[],
@@ -207,7 +206,7 @@ const TableComponent = (props: Props) => {
       ) :  isError? (
         <div>Error loading data...</div>
       ) : (
-        <Table columns={columns} dataSource={products} />
+        <Table columns={columns} dataSource={products.data} />
       )}
     </div>
   );
