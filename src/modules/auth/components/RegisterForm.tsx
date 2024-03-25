@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import * as yup from "yup";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SubmitHandler, useForm } from "react-hook-form";
+
 import { useSignupMutation } from "../../../api/auth";
-import { useNavigate } from "react-router-dom";
 import { EGender, IRegisterPayload } from "../../../interfaces/Login";
 import { ICountry, IState } from "../../../interfaces/Location";
 import {

@@ -1,14 +1,14 @@
-import React from "react";
-import Register from "../components/RegisterForm";
+import React from 'react'
+import Register from '../components/RegisterForm'
 
-type Props = {};
+type Props = {}
 
 const RegisterPage = (props: Props) => {
   return (
     <div>
-      <Register />
+        <Register />
     </div>
-  );
-};
+  )
+}
 
-export default RegisterPage;
+export default RegisterPage
