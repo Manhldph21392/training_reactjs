@@ -18,9 +18,17 @@ const productApi = createApi({
             query: () => ({
                 url: `/product`,
             }),
+            transformResponse: (response: { data: IProduct[] }) => {
+                return response.data
+            },
         }),
         getProductById: builder.query<IProduct, string>({
             query: (id) => `/product/${id}`,
+            transformResponse: (response: { data: IProduct }) => {
+                console.log(response);
+
+                return response.data
+            },
         }),
         addProduct: builder.mutation<IProduct, Partial<IProduct>>({
             query: (product) => ({
@@ -29,12 +37,15 @@ const productApi = createApi({
                 body: product,
             }),
         }),
-        updateProduct: builder.mutation<IProduct, Partial<IProduct>>({
+        updateProduct: builder.mutation<IProduct, Partial<IProduct> & Pick<IProduct, 'id'>>({
             query: (product) => ({
-                url: `/product/${product.id}`,
+                url: `/product`,
                 method: 'PUT',
                 body: product,
             }),
+            transformResponse: (response: { data: IProduct }) => {
+                return response.data
+            },
         }),
         deleteProduct: builder.mutation<void, string>({
             query: (id) => ({

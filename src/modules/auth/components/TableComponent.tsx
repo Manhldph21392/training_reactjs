@@ -9,20 +9,11 @@ import {
   useDeleteProductMutation,
   useGetProductsQuery,
 } from "../../../api/product";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { IProduct } from "../../../interfaces/Product";
 
 type Props = {};
 
-interface Product {
-  id: string;
-  status: string;
-  currency: string;
-  total: number;
-  order: string;
-  client: string;
-  invoice: string;
-  fundingMethod: string;
-}
 
 const TableComponent = (props: Props) => {
   const [searchText, setSearchText] = useState("");
@@ -38,13 +29,13 @@ const TableComponent = (props: Props) => {
 
   const [deleteProductMutation] = useDeleteProductMutation();
   // Delete
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: number) => {
     try {
       Modal.confirm({
         title: "Confirm",
         content: "Are you sure you want to delete this product?",
         onOk: async () => {
-          await deleteProductMutation(id); // Gọi mutation để xóa sản phẩm
+          await deleteProductMutation(id.toString()); // Gọi mutation để xóa sản phẩm
           await refetch(); // Lấy lại danh sách sản phẩm sau khi xóa
           console.log("Product deleted successfully");
         },
@@ -72,8 +63,8 @@ const TableComponent = (props: Props) => {
   };
 
   const getColumnSearchProps = (
-    dataIndex: keyof Product
-  ): TableColumnType<Product> => ({
+    dataIndex: keyof IProduct
+  ): TableColumnType<IProduct> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -173,7 +164,7 @@ const TableComponent = (props: Props) => {
     </Menu>
   );
 
-  const columns: TableColumnsType<Product> = [
+  const columns: TableColumnsType<IProduct> = [
     {
       title: "Status",
       dataIndex: "status",
@@ -239,9 +230,10 @@ const TableComponent = (props: Props) => {
       width: "10%",
       render: (_, record) => (
         <Space>
-          <Dropdown overlay={actionMenu}>
-            <Button>View Detail</Button>
-          </Dropdown>
+          <Button>
+            <Link to={`/update-product/${record.id}`}>Update</Link>
+          </Button>
+
           <Button danger onClick={() => handleDelete(record.id)}>
             Remove
           </Button>
@@ -281,7 +273,13 @@ const TableComponent = (props: Props) => {
       ) : isError ? (
         <div>Error loading data...</div>
       ) : (
-        <Table columns={columns} dataSource={products.data} />
+        <Table
+          columns={columns}
+          dataSource={products.map((product) => ({
+            ...product,
+            key: product.id, // Sử dụng id hoặc một trường dữ liệu duy nhất khác làm key
+          }))}
+        />
       )}
     </div>
   );

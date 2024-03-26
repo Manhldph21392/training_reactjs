@@ -1,9 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Cascader, DatePicker, Form, Input, message } from "antd";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-import { useAddProductMutation, useGetProductsQuery } from "../../../api/product";
+import {
+  useAddProductMutation,
+  useGetProductByIdQuery,
+  useGetProductsQuery,
+  useUpdateProductMutation,
+} from "../../../api/product";
+import { IProduct } from "../../../interfaces/Product";
 const { RangePicker } = DatePicker;
 
 const formItemLayout = {
@@ -27,31 +33,53 @@ type FieldType = {
   fundingMethod: string;
 };
 
-const AddProductPage = () => {
+const UpdateProduct = () => {
   const navigate = useNavigate();
+  const { idProduct } = useParams<{ idProduct: string }>();
   const { refetch } = useGetProductsQuery();
-  const [addProduct, { isLoading: isAddLoading }] = useAddProductMutation();
+
+  const { data: productData } = useGetProductByIdQuery(idProduct || "");
+
+  const [updateProduct, { isLoading: isUpdateLoading }] =
+    useUpdateProductMutation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const onFinish = async (values: any) => {
+  useEffect(() => {
+    if (productData) {
+      form.setFieldsValue({
+        status: productData.status,
+        client: productData.client,
+        currency: productData.currency,
+        total: productData.total,
+        order: productData.order,
+        invoice: productData.invoice,
+        fundingMethod: productData.fundingMethod,
+      });
+    }
+  }, [productData]);
+
+  const onFinish = async (values: IProduct) => {
     try {
-      await addProduct(values).unwrap();
+      await updateProduct({ ...values, id: Number(idProduct) }).unwrap();
       form.resetFields();
-      await refetch(); // Lấy lại dữ liệu sau khi thêm sản phẩm
+      await refetch();
       Swal.fire({
         icon: "success",
-        title: "Add product successfully!",
+        title: "Update product successfully!",
       });
-      navigate("/list-data"); // Chuyển hướng sau khi thêm sản phẩm thành công
+      await navigate("/list-data");
     } catch (error) {
-      console.error("Error adding product:", error);
-      messageApi.error("Failed to add product. Please try again later.");
+      console.error("Error updating product:", error);
+      messageApi.error("Failed to update product. Please try again later.");
     }
   };
+
   return (
     <div style={{ textAlign: "center" }}>
-      <h1>Add Product</h1>
+      <h1>Update Product</h1>
+      {contextHolder}
+      {isUpdateLoading}
       <Form
         form={form}
         onFinish={onFinish}
@@ -119,7 +147,7 @@ const AddProductPage = () => {
             <Link to="/list-data">Cancel</Link>
           </Button>
           <Button type="primary" htmlType="submit">
-            Submit
+            Update
           </Button>
         </Form.Item>
       </Form>
@@ -127,4 +155,4 @@ const AddProductPage = () => {
   );
 };
 
-export default AddProductPage;
+export default UpdateProduct;
