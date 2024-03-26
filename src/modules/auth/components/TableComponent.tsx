@@ -1,11 +1,15 @@
 import React, { useRef, useState } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { InputRef, TableColumnsType, TableColumnType } from "antd";
-import { Button, Input, Space, Table, Dropdown, Menu } from "antd";
+import { Button, Input, Space, Table, Dropdown, Menu, Modal } from "antd";
 import type { FilterDropdownProps } from "antd/es/table/interface";
 import Highlighter from "react-highlight-words";
 import SearchBox from "./SearchBox";
-import { useGetProductsQuery } from "../../../api/product";
+import {
+  useDeleteProductMutation,
+  useGetProductsQuery,
+} from "../../../api/product";
+import { useNavigate } from "react-router-dom";
 
 type Props = {};
 
@@ -17,14 +21,41 @@ interface Product {
   order: string;
   client: string;
   invoice: string;
+  fundingMethod: string;
 }
 
 const TableComponent = (props: Props) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef<InputRef>(null);
-  const { data: products = [], isLoading, isError } = useGetProductsQuery({});
-  
+  const navigate = useNavigate();
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    refetch,
+  } = useGetProductsQuery();
+
+  const [deleteProductMutation] = useDeleteProductMutation();
+  // Delete
+  const handleDelete = async (id: string) => {
+    try {
+      Modal.confirm({
+        title: "Confirm",
+        content: "Are you sure you want to delete this product?",
+        onOk: async () => {
+          await deleteProductMutation(id); // Gọi mutation để xóa sản phẩm
+          await refetch(); // Lấy lại danh sách sản phẩm sau khi xóa
+          console.log("Product deleted successfully");
+        },
+        onCancel() {
+          console.log("Cancel");
+        },
+      });
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
   const handleSearch = (
     selectedKeys: string[],
     confirm: FilterDropdownProps["confirm"],
@@ -147,35 +178,59 @@ const TableComponent = (props: Props) => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: "20%",
       ...getColumnSearchProps("status"),
+      render: (text, record) => {
+        let color;
+        switch (record.status) {
+          case "PENDING":
+            color = "#D3D3D3"; // Màu xám
+            break;
+          case "PROCESSING":
+            color = "#FFD700"; // Màu vàng
+            break;
+          case "FULFILLED":
+            color = "#008000"; // Màu xanh
+            break;
+          default:
+            color = "inherit";
+        }
+        return <span style={{ color }}>{text}</span>;
+      },
     },
     {
       title: "Client",
       dataIndex: "client",
       key: "client",
-      width: "20%",
       ...getColumnSearchProps("client"),
     },
     {
       title: "Currency",
       dataIndex: "currency",
       key: "currency",
-      width: "20%",
       ...getColumnSearchProps("currency"),
     },
     {
       title: "Total",
       dataIndex: "total",
       key: "total",
-      width: "20%",
       ...getColumnSearchProps("total"),
+    },
+    {
+      title: "Order",
+      dataIndex: "order",
+      key: "order",
+      ...getColumnSearchProps("order"),
+    },
+    {
+      title: "Funding Method",
+      dataIndex: "fundingMethod",
+      key: "fundingMethod",
+      ...getColumnSearchProps("fundingMethod"),
     },
     {
       title: "Invoice",
       dataIndex: "invoice",
       key: "invoice",
-      width: "20%",
       ...getColumnSearchProps("invoice"),
     },
     {
@@ -187,7 +242,7 @@ const TableComponent = (props: Props) => {
           <Dropdown overlay={actionMenu}>
             <Button>View Detail</Button>
           </Dropdown>
-          <Button danger onClick={() => handleMenuClick("remove")}>
+          <Button danger onClick={() => handleDelete(record.id)}>
             Remove
           </Button>
         </Space>
@@ -200,10 +255,30 @@ const TableComponent = (props: Props) => {
       <div className="title" style={{ textAlign: "center" }}>
         <h1>List User</h1>
       </div>
-      <SearchBox onSearch={handleSearch} />
+      <div
+        className="wrap_components_top"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: "20px 10px",
+        }}
+      >
+        <div className="box-serach" style={{ width: "90%" }}>
+          {" "}
+          <SearchBox onSearch={handleSearch} />
+        </div>
+        <Button
+          style={{ width: "10%" }}
+          type="primary"
+          onClick={() => navigate("/add-product")}
+        >
+          Add Procudt
+        </Button>
+      </div>
       {isLoading ? (
         <div>Loading...</div>
-      ) :  isError? (
+      ) : isError ? (
         <div>Error loading data...</div>
       ) : (
         <Table columns={columns} dataSource={products.data} />

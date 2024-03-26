@@ -3,11 +3,19 @@ import WebsiteLayout from "./modules/auth/pages/WebsiteLayout";
 import LoginPage from "./modules/auth/pages/LoginPage";
 import RegisterPage from "./modules/auth/pages/RegisterPage";
 import ListData from "./modules/auth/pages/ListData";
+import HomePage from "./modules/auth/pages/HomePage";
+import AddProductPage from "./modules/auth/pages/AddProductPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <WebsiteLayout />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      },
+    ],
   },
   {
     path: "/login",
@@ -20,5 +28,9 @@ export const router = createBrowserRouter([
   {
     path: "list-data",
     element: <ListData />,
+  },
+  {
+    path: "/add-product",
+    element: <AddProductPage />,
   },
 ]);
